@@ -1,0 +1,38 @@
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+
+    style
+      body {
+        font-family: 'Garamond', serif;
+        background-color: #DDD;
+      }
+
+      h1,h2,h3 {
+        border-bottom: 1px solid #CCC;
+      }
+
+      .container {
+        width: 1140px;
+        margin: auto;
+
+        background-color: #EEE;
+        padding: 8px;
+      }
+
+      @media ( max-width: 1200px ) {
+        .container {
+          width: 970;
+        }
+      }
+      @media ( max-width: 1024px ) {
+        .container {
+          width: auto;
+        }
+      }
+
+            
+body
+  .container
+    include readme.html

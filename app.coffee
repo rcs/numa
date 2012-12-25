@@ -66,19 +66,22 @@ returnAttributes = (whitelist...) ->
 
 
 app = express()
-app.enable 'trust proxy'
-app.use require './lib/middleware/easy-send'
-app.use express.bodyParser()
-app.use express.cookieParser()
+app.configure ->
+  app.enable 'trust proxy'
+  app.set 'port', process.env.PORT || 3000
+  app.set 'views', __dirname + '/views'
+  app.set 'view engine', 'jade'
 
-app.use express.logger('dev')
+  app.use require './lib/middleware/easy-send'
+  app.use express.bodyParser()
+  app.use express.cookieParser()
+  app.use express.logger('dev')
 
 # Route: /
 #
 # Returns a basic response.
 app.all '/', (req,res,next) ->
-    # TODO
-    res.text 'hi there'
+  res.render 'index'
 
 # Route: /html
 #
@@ -218,8 +221,8 @@ app.all '/status/:codes', (req,res,next) ->
 
   choice = parseInt(choices[_.random(0,choices.length-1)])
 
-  res.statusCode = choice
-  res.end()
+
+  prettyStatus(res,choice)
 
 # Route: /response-headers
 #
@@ -293,6 +296,17 @@ suppliedAuth = (req) ->
 
 
 
+prettyStatus = (res, status) ->
+  res.statusCode = status
+
+  filename = __dirname + "/public/images/#{parseInt status}.jpg"
+  fs.exists filename, (exists) ->
+    if exists
+      res.setHeader 'Content-Type', 'image/jpeg'
+      fs.createReadStream(filename).pipe(res)
+    else
+      res.status(status).end ''
+
 
 
 
@@ -309,8 +323,8 @@ app.all '/basic-auth/:user?/:pass?', (req,res,next) ->
   if req.params.user == credentials.user and req.params.pass == credentials.pass
     res.json authenticated: true, user: credentials.user
   else
-    res.statusCode = 401
-    res.end()
+    res.setHeader 'WWW-Authenticate', 'Basic realm="Fake Realm"'
+    prettyStatus(res,401)
 
 # Route: /hidden-basic-auth/:user/:pass
 #
@@ -325,8 +339,7 @@ app.all '/hidden-basic-auth/:user?/:pass?', (req,res,next) ->
   if req.params.user == credentials.user and req.params.pass == credentials.pass
     res.json authenticated: true, user: credentials.user
   else
-    res.statusCode = 404
-    res.end()
+    prettyStatus(res, 404)
 
 # Route: /digest-auth/:user/:pass
 #
@@ -368,4 +381,5 @@ app.all /^\/base64\/(.*)/, (req,res,next) ->
 
 
 
-app.listen process.env.PORT || 3000
+app.listen app.get('port'), ->
+  console.log "Express server listening on port #{app.get 'port'}"

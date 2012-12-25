@@ -1,0 +1,138 @@
+<h1>Numa - A Swiss Army HTTP Server</h1>
+<p>Test all kinds of HTTP requests and responses.
+
+</p>
+<p>Freely hosted at <a href="http://numa.herokuapp.com">Heroku</a>
+
+</p>
+<h2>Endpoints</h2>
+<h3>Grab Bag</h3>
+<p><a href="/">/</a> This page
+
+</p>
+<p><a href="/ip">/ip</a> Returns  Origin IP
+
+</p>
+<p><a href="/html">/html</a> Returns an HTML rendered page
+
+</p>
+<p><a href="/stream/10?delay=10">/stream/:n</a> Returns :number streaming (Transfer-Encoding: chunked) response, with a delay between each specified in ?delay
+
+</p>
+<p><a href="/status/418">/status/:codes</a> Returns a randomly selected status code from :codes
+
+</p>
+<p><a href="/delay/5">/delay/:n</a> Returns basic request information after :n seconds
+
+</p>
+<p><a href="/base64/WW91J3ZlIGhhY2tlZCB0aGUgbWF0cml4Lg==">/base64/:string</a> Returns the decoded :string
+
+</p>
+<h3>Headers</h3>
+<p><a href="/headers">/headers</a> Returns the request headers in &#39;headers&#39;
+
+</p>
+<p><a href="/user-agent">/user-agent</a> Returns the user-agent in &#39;user-agent&#39;
+
+</p>
+<p><a href="/response-headers?X-Powered-By=Magic">/response-headers</a> Returns a response with headers set from query parameters
+
+</p>
+<h3>Robots</h3>
+<p><a href="/robots.txt">/robots.txt</a> Returns a robots.txt file that disallows access to /deny .
+
+</p>
+<p><a href="/deny">/deny</a> Returns a basic response from a URL that&#39;s denied by robots.txt
+
+
+</p>
+<h3>HTTP Methods</h3>
+<p>They&#39;ll respond with a 404 to non-matching methods
+
+</p>
+<p><a href="/get">/get</a> Returns a basic response to GET requests
+
+</p>
+<p><a href="/put">/put</a> Returns a basic response to PUT requests
+
+</p>
+<p><a href="/post">/post</a> Returns a basic response to POST requests
+
+</p>
+<p><a href="/patch">/patch</a> Returns a basic response to PATCH requests
+
+</p>
+<p><a href="/delete">/delete</a> Returns a basic response to DELETE requests
+
+</p>
+<p><a href="/gzip">/gzip</a> Returns gzip-compressed basic request response with &#39;gzipped&#39;: true
+
+</p>
+<h3>Redirects</h3>
+<p><a href="/redirect/1">/redirect/:n</a> Returns a 302 redirect to /redirect/number - 1 if number is greater than 1, otherwise redirects to /get
+
+</p>
+<p><a href="/relative-redirect/1">/relative-redirect/:n</a> Returns a relative redirect to /redirect/number - 1 if number is greater than 1, otherwise redirects to /get
+
+
+</p>
+<h3>Cookies</h3>
+<p><a href="/cookies">/cookies</a> Returns the cookies sent
+
+</p>
+<p><a href="/cookies/set/fun/kitties">/cookies/set/:name/:value</a> Returns a response with a Set-Cookie: :name=:value
+
+</p>
+<p><a href="/cookies/set?fancy=feast">/cookies/set</a> Returns a response with a set-cookie header constructed from the query parameters
+
+</p>
+<h3>Authentication</h3>
+<p><a href="/basic-auth/user/pass">/basic-auth/:user/:pass</a> Prompts for authentication and returns 401 unless the provided credentials match :user and :pass
+
+</p>
+<p><a href="/hidden-basic-auth/user/pass">/hidden-basic-auth/:user/:pass</a> Prompts for authentication and returns 401 unless the provided credentials match :user and :pass
+
+</p>
+<p><a href="/digest-auth">/digest-auth</a> Doesn&#39;t work
+
+
+</p>
+<h2>Description</h2>
+<p><a href="http://en.wikipedia.org/wiki/Numa_Pompilius">Numa</a> was the second king of Rome.
+
+
+</p>
+<h2>Examples</h2>
+<pre><code class="lang-sh">$ curl numa.herokuapp.com/ip</code></pre>
+<pre><code class="lang-javascript">{
+  &quot;origin&quot;: &quot;127.0.0.1&quot;
+}</code></pre>
+<pre><code class="lang-sh">$ curl numa.herokuapp.com/get</code></pre>
+<pre><code class="lang-javascript">{
+  &quot;origin&quot;: &quot;127.0.0.1&quot;,
+  &quot;url&quot;: &quot;http://localhost:3000/get&quot;,
+  &quot;args&quot;: {},
+  &quot;headers&quot;: {
+    &quot;user-agent&quot;: &quot;curl/7.24.0 (x86_64-apple-darwin12.0) libcurl/7.24.0 OpenSSL/0.9.8r zlib/1.2.5&quot;,
+    &quot;host&quot;: &quot;localhost:3000&quot;,
+    &quot;accept&quot;: &quot;*/*&quot;
+  },
+  &quot;form&quot;: {},
+  &quot;json&quot;: null,
+  &quot;data&quot;: {},
+  &quot;files&quot;: {}
+}</code></pre>
+<pre><code class="lang-sh">$ curl -i localhost:3000/status/418</code></pre>
+<pre><code class="lang-javascript">HTTP/1.1 418 I&#39;m a teapot
+X-Powered-By: Express
+Date: Tue, 25 Dec 2012 21:48:10 GMT
+Connection: keep-alive
+Transfer-Encoding: chunked</code></pre>
+<h2>See Also</h2>
+<p><a href="http://httpbin.org">httpbin.org</a> httpbin, the inspiration for this project
+
+</p>
+<p><a href="http://www.flickr.com/photos/girliemac/">GirlieMac</a> The fabulous author of the status images
+
+</p>
+
